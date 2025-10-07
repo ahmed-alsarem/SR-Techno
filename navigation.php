@@ -21,6 +21,7 @@ $user_name = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : "زائر"
             <li><a href="cart.php">السلة</a></li>
             <li><a href="checkout.php">الدفع</a></li>
             <?php if(isset($_SESSION['user_id'])): ?>
+                <li><a href="admin_products.php" style="background:#10b981;color:white;padding:0.5rem 1rem;border-radius:5px;text-decoration:none;font-weight:bold;">إدارة المنتجات</a></li>
                 <li><span class="user-info">مرحباً، <?php echo htmlspecialchars($user_name); ?></span></li>
                 <li><a href="logout.php" class="logout-btn">تسجيل الخروج</a></li>
             <?php else: ?>
