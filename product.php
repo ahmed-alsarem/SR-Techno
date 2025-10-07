@@ -18,6 +18,8 @@ ob_start();
     <button onclick="filterProducts('electronics')">إلكترونيات</button>
     <button onclick="filterProducts('clothes')">ملابس</button>
     <button onclick="filterProducts('home')">أدوات منزلية</button>
+    <button onclick="filterProducts('sports')">رياضة</button>
+    <button onclick="filterProducts('books')">كتب</button>
 </div>
 
 <!-- Products Grid -->
@@ -27,7 +29,7 @@ ob_start();
     $products_result = $conn->query("SELECT * FROM products ORDER BY created_at DESC");
     if($products_result && $products_result->num_rows > 0){
         while($product = $products_result->fetch_assoc()){
-            $category = 'electronics'; // يمكن تحديد الفئة بناءً على نوع المنتج
+            $category = $product['category'] ? $product['category'] : 'electronics';
             echo "<div class='product-card' data-category='$category'>";
             
             // استخدام placeholder image
@@ -70,18 +72,18 @@ $page_content = ob_get_clean();
 // إضافة JavaScript للفلترة
 $additional_js = '
 <script>
-// فلترة المنتجات
-function filterProducts(category) {
+    // فلترة المنتجات
+    function filterProducts(category) {
     const cards = document.querySelectorAll(".product-card");
-    cards.forEach(card => {
+        cards.forEach(card => {
         if(category === "all" || card.dataset.category === category) {
             card.style.display = "block";
-        } else {
+            } else {
             card.style.display = "none";
-        }
-    });
+            }
+        });
 
-    // تفعيل الزر النشط
+        // تفعيل الزر النشط
     const buttons = document.querySelectorAll(".filter-btns button");
     buttons.forEach(btn => btn.classList.remove("active"));
     event.target.classList.add("active");

@@ -18,6 +18,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
         $name = trim($_POST['name']);
         $price = floatval($_POST['price']);
         $description = trim($_POST['description']);
+        $category = trim($_POST['category']);
         $image_url = trim($_POST['image_url']);
         
         // معالجة الصورة
@@ -52,8 +53,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
         }
         
         if(!empty($name) && $price > 0 && empty($message)){
-            $stmt = $conn->prepare("INSERT INTO products (name, price, description, image) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param("sdss", $name, $price, $description, $image);
+            $stmt = $conn->prepare("INSERT INTO products (name, price, description, category, image) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param("sdsss", $name, $price, $description, $category, $image);
             if($stmt->execute()){
                 $message = "تم إضافة المنتج بنجاح!";
             } else {
@@ -68,6 +69,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
         $name = trim($_POST['name']);
         $price = floatval($_POST['price']);
         $description = trim($_POST['description']);
+        $category = trim($_POST['category']);
         $product_id = intval($_POST['product_id']);
         $image_url = trim($_POST['image_url']);
         
@@ -103,11 +105,11 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
         
         if(!empty($name) && $price > 0 && $product_id > 0 && empty($message)){
             if($image !== null){
-                $stmt = $conn->prepare("UPDATE products SET name=?, price=?, description=?, image=? WHERE id=?");
-                $stmt->bind_param("sdssi", $name, $price, $description, $image, $product_id);
+                $stmt = $conn->prepare("UPDATE products SET name=?, price=?, description=?, category=?, image=? WHERE id=?");
+                $stmt->bind_param("sdsssi", $name, $price, $description, $category, $image, $product_id);
             } else {
-                $stmt = $conn->prepare("UPDATE products SET name=?, price=?, description=? WHERE id=?");
-                $stmt->bind_param("sdsi", $name, $price, $description, $product_id);
+                $stmt = $conn->prepare("UPDATE products SET name=?, price=?, description=?, category=? WHERE id=?");
+                $stmt->bind_param("sdssi", $name, $price, $description, $category, $product_id);
             }
             
             if($stmt->execute()){
@@ -201,6 +203,18 @@ ob_start();
             <div class="form-group">
                 <label for="description">الوصف</label>
                 <textarea id="description" name="description" rows="4"><?php echo $edit_product ? htmlspecialchars($edit_product['description']) : ''; ?></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="category">الفئة</label>
+                <select id="category" name="category" required>
+                    <option value="">اختر الفئة</option>
+                    <option value="electronics" <?php echo ($edit_product && $edit_product['category'] == 'electronics') ? 'selected' : ''; ?>>إلكترونيات</option>
+                    <option value="clothes" <?php echo ($edit_product && $edit_product['category'] == 'clothes') ? 'selected' : ''; ?>>ملابس</option>
+                    <option value="home" <?php echo ($edit_product && $edit_product['category'] == 'home') ? 'selected' : ''; ?>>أدوات منزلية</option>
+                    <option value="sports" <?php echo ($edit_product && $edit_product['category'] == 'sports') ? 'selected' : ''; ?>>رياضة</option>
+                    <option value="books" <?php echo ($edit_product && $edit_product['category'] == 'books') ? 'selected' : ''; ?>>كتب</option>
+                </select>
             </div>
             
             <div class="form-group">
@@ -434,7 +448,8 @@ $additional_css = '
 }
 
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+.form-group select {
     width: 100%;
     padding: 0.75rem;
     border: 1px solid #d1d5db;
@@ -443,7 +458,8 @@ $additional_css = '
 }
 
 .form-group input:focus,
-.form-group textarea:focus {
+.form-group textarea:focus,
+.form-group select:focus {
     outline: none;
     border-color: #1E3A8A;
     box-shadow: 0 0 0 2px rgba(30, 58, 138, 0.1);
