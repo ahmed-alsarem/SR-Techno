@@ -14,12 +14,32 @@ ob_start();
 
 <!-- Filter Buttons -->
 <div class="filter-btns">
+    <?php
+    // جلب الكاتجوريات الموجودة فعلاً
+    $categories_result = $conn->query("SELECT DISTINCT category FROM products WHERE category IS NOT NULL AND category != ''");
+    $categories = [];
+    if($categories_result && $categories_result->num_rows > 0){
+        while($row = $categories_result->fetch_assoc()){
+            $categories[] = $row['category'];
+        }
+    }
+    
+    // أسماء الكاتجوريات بالعربية
+    $category_names = [
+        'electronics' => 'إلكترونيات',
+        'clothes' => 'ملابس',
+        'home' => 'أدوات منزلية',
+        'sports' => 'رياضة',
+        'books' => 'كتب'
+    ];
+    ?>
+    
     <button class="active" onclick="filterProducts('all')">الكل</button>
-    <button onclick="filterProducts('electronics')">إلكترونيات</button>
-    <button onclick="filterProducts('clothes')">ملابس</button>
-    <button onclick="filterProducts('home')">أدوات منزلية</button>
-    <button onclick="filterProducts('sports')">رياضة</button>
-    <button onclick="filterProducts('books')">كتب</button>
+    <?php foreach($categories as $category): ?>
+        <button onclick="filterProducts('<?php echo $category; ?>')">
+            <?php echo isset($category_names[$category]) ? $category_names[$category] : $category; ?>
+        </button>
+    <?php endforeach; ?>
 </div>
 
 <!-- Products Grid -->
