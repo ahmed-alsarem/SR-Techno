@@ -162,7 +162,15 @@ ob_start();
     </div>
 
     <?php if($message): ?>
-        <div class="message <?php echo (strpos($message, 'نجح') !== false || strpos($message, 'تم') !== false) ? 'success' : 'error'; ?>">
+        <div class="message <?php 
+            if(strpos($message, 'حذف') !== false) {
+                echo 'error'; // رسائل الحذف باللون الأحمر
+            } elseif(strpos($message, 'نجح') !== false || strpos($message, 'تم إضافة') !== false || strpos($message, 'تم تحديث') !== false) {
+                echo 'success'; // رسائل النجاح باللون الأخضر
+            } else {
+                echo 'error'; // باقي الرسائل باللون الأحمر
+            }
+        ?>">
             <?php echo $message; ?>
         </div>
     <?php endif; ?>
