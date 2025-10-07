@@ -162,7 +162,7 @@ ob_start();
     </div>
 
     <?php if($message): ?>
-        <div class="message <?php echo strpos($message, 'نجح') !== false ? 'success' : 'error'; ?>">
+        <div class="message <?php echo (strpos($message, 'نجح') !== false || strpos($message, 'تم') !== false) ? 'success' : 'error'; ?>">
             <?php echo $message; ?>
         </div>
     <?php endif; ?>
@@ -362,12 +362,12 @@ $additional_css = '
 }
 
 .btn-primary {
-    background: #10b981;
+    background: #1E3A8A;
     color: white;
 }
 
 .btn-primary:hover {
-    background: #059669;
+    background: #2563EB;
 }
 
 .btn-secondary {
