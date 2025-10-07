@@ -1,0 +1,4 @@
+# إعادة توجيه الصفحة الرئيسية إلى home.php
+RewriteEngine On
+RewriteRule ^$ home.php [L]
+RewriteRule ^index\.php$ home.php [L]
