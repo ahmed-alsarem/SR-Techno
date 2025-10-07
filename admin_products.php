@@ -362,12 +362,12 @@ $additional_css = '
 }
 
 .btn-primary {
-    background: #1E3A8A;
+    background: #10b981;
     color: white;
 }
 
 .btn-primary:hover {
-    background: #2563EB;
+    background: #059669;
 }
 
 .btn-secondary {
